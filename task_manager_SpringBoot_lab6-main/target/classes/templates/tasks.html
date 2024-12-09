@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Your Tasks</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h2>Your Tasks</h2>
+
+<!-- Search Form -->
+<form th:action="@{/tasks}" method="get">
+  <input type="text" name="title" th:value="${searchTitle}" placeholder="Search by title" />
+  <button type="submit">Search</button>
+</form>
+
+<!-- Link to create a new task -->
+<a th:href="@{/tasks/new}">Create New Task</a>
+
+<!-- Task Table -->
+<table>
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Priority</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="task : ${taskPage.content}">
+    <td th:text="${task.title}">Task Title</td>
+    <td th:text="${task.description}">Task Description</td>
+    <td th:text="${task.priority}">Task Priority</td>
+    <td th:text="${task.status}">Task Status</td>
+    <td>
+      <a th:href="@{/tasks/delete/{id}(id=${task.id})}">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div>
+  <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}"></span>
+</div>
+<div>
+  <a th:if="${currentPage > 0}" th:href="@{|/tasks?page=${currentPage - 1}&title=${searchTitle}|}">Previous</a>
+  <a th:if="${currentPage < totalPages - 1}" th:href="@{|/tasks?page=${currentPage + 1}&title=${searchTitle}|}">Next</a>
+</div>
+</body>
+</html>
